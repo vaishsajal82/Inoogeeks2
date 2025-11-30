@@ -1,0 +1,36 @@
+p{
+    text-overflow:inherit;
+}
+img{
+    margin:auto;
+    display:flex
+
+}
+h4{
+    color:black;
+    font-family:serif;
+    font-size: larger;
+    
+
+}
+body{
+    background-color:rgb(254, 239, 220);
+
+}
+ol{
+    list-style:none;
+    color:rgb(80, 0, 77);
+    font-family:cursive;
+    
+
+}
+h2{
+    font-style:oblique;
+    font-family: cursive;
+}
+ul{
+    list-style:none;
+}
+.hello{
+    background-color: rgb(217, 255, 0);
+}
