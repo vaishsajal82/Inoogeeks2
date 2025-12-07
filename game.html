@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reaction Time Tester</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: #fff;
+    }
+
+    .game-container {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 25px 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 6px 0;
+    }
+
+    #statusBox {
+      margin: 15px auto;
+      width: 100%;
+      max-width: 350px;
+      height: 120px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #444;
+      cursor: pointer;
+      border: 2px solid #888;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    #statusBox:active {
+      transform: scale(0.98);
+    }
+
+    #startBtn {
+      padding: 8px 18px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #startBtn:hover {
+      background-color: #3c9640;
+    }
+
+    #result {
+      margin-top: 10px;
+      font-size: 18px;
+      min-height: 24px;
+    }
+
+    .footer {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+<div class="game-container">
+  <h1>Reaction Time Tester</h1>
+  <p>Click <b>Start</b>, wait for the box to turn <b>green</b>, then click as fast as you can!</p>
+
+  <div id="statusBox">
+    Click "Start" to begin
+  </div>
+
+  <button id="startBtn">Start</button>
+
+  <p>Your Reaction Time: <span id="result">-- ms</span></p>
+
+  <div class="footer">
+    Created by: <b>Your Name</b>
+  </div>
+</div>
+
+<script>
+  const statusBox = document.getElementById("statusBox");
+  const startBtn = document.getElementById("startBtn");
+  const resultDisplay = document.getElementById("result");
+
+  let gameState = "idle"; // "idle" | "waiting" | "ready"
+  let startTime = 0;
+  let timeoutId = null;
+
+  // Start the game
+  function startGame() {
+    // Reset
+    clearTimeout(timeoutId);
+    resultDisplay.textContent = "-- ms";
+    statusBox.style.backgroundColor = "#444";
+    statusBox.textContent = "Wait for green...";
+    
+    gameState = "waiting";
+
+    // Random delay between 1 and 3 seconds
+    const randomDelay = Math.floor(Math.random() * 2000) + 1000;
+
+    timeoutId = setTimeout(() => {
+      statusBox.style.backgroundColor = "green";
+      statusBox.textContent = "CLICK NOW!";
+      gameState = "ready";
+      startTime = Date.now();
+    }, randomDelay);
+  }
+
+  // Handle clicks on the box
+  function boxClicked() {
+    if (gameState === "waiting") {
+      // Clicked too early
+      statusBox.style.backgroundColor = "#ff5555";
+      statusBox.textContent = "Too soon! Wait for green.";
+      resultDisplay.textContent = "-- ms";
+      clearTimeout(timeoutId);
+      gameState = "idle";
+    } else if (gameState === "ready") {
+      // Correct reaction
+      const endTime = Date.now();
+      const reactionTime = endTime - startTime; // in ms
+      statusBox.style.backgroundColor = "#444";
+      statusBox.textContent = "Good job! Click Start to try again.";
+      resultDisplay.textContent = reactionTime + " ms";
+      gameState = "idle";
+    } else {
+      // gameState === "idle"
+      // Do nothing or hint
+      statusBox.textContent = "Click Start first!";
+    }
+  }
+
+  // Event listeners
+  startBtn.addEventListener("click", startGame);
+  statusBox.addEventListener("click", boxClicked);
+</script>
+
+</body>
+</html>
